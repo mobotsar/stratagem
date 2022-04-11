@@ -1,0 +1,13 @@
+profile             = ocamlformat
+let-and             = compact
+break-cases         = toplevel
+break-fun-decl      = fit-or-vertical
+break-fun-sig       = fit-or-vertical
+module-item-spacing = preserve
+break-before-in     = fit-or-vertical
+field-space         = loose
+parens-tuple		  = multi-line-only
+margin              = 100
+space-around-records
+space-around-lists
+space-around-arrays
