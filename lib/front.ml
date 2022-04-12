@@ -1,7 +1,5 @@
 open! Containers
 
-let substr s a b = String.drop a s |> String.take (b - a)
-
 type token = Name of string | Dot | Lambda | OpenParen | CloseParen | Space
 
 let lambda_char = '#'
@@ -31,10 +29,8 @@ let lex s =
     else if Str.string_match valid_not_name s debut then
       lex' s (debut + 1) fin (generic s.[debut] :: toks)
     else if Str.string_match name s debut then
-      let next : int = Str.match_end () in
-      lex' s next fin (Name (substr s debut next) :: toks)
+      let next = Str.match_end () in
+      lex' s next fin (Name (String.sub s debut (next - debut)) :: toks)
     else raise (Failure ("illegal character: " ^ Char.to_string s.[debut]))
   in
   lex' s 0 (String.length s) [] |> List.rev
-
-(* type term = Name | Abstraction of term * term | Application of term * term *)
