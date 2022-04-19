@@ -58,6 +58,7 @@ type term = Name of info * string | Abstr of info * term * term | App of info * 
 exception NoRule
 
 let parse_prog toks =
+  let toks = ref toks in
   let peek () =
     match !toks with
     | [] -> raise (Failure "oof peek")
@@ -104,5 +105,8 @@ let parse_prog toks =
     | Space -> match_tok Space
     | _ -> ()
   in
+  match_optional_space () ;
   let t = parse_term () in
-  match_tok End ; t
+  match_optional_space () ; match_tok End ; t
+
+(* expression templates *)
