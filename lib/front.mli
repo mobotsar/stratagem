@@ -4,4 +4,4 @@ type term = Name of info * string | Abstr of info * term * term | App of info * 
 val parse_prog : token list -> term
 val tts : token -> string
 val lex : string -> token list
-(* val lambda_char : char *)
+(* val lambda_char : cha *)

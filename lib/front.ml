@@ -53,6 +53,8 @@ type term = Name of info * string | Abstr of info * term * term | App of info * 
   Term -> x
         | # S x S . S Term
         | ( S Term space Term S)
+  S    -> space
+        | ε
 *)
 
 exception NoRule
