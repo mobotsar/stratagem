@@ -52,7 +52,7 @@ type term = Name of info * string | Abstr of info * term * term | App of info * 
 (*
   Term -> x
         | # S x S . S Term
-        | ( S Term space Term S)
+        | ( S Term space S Term S)
   S    -> space
         | ε
 *)
@@ -97,6 +97,7 @@ let parse_prog toks =
         match_optional_space () ;
         let t1 = parse_term () in
         match_tok Space ;
+        match_optional_space () ;
         let t2 = parse_term () in
         match_optional_space () ;
         match_tok CloseParen ;
