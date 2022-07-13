@@ -16,7 +16,7 @@ Second, one simply uses `foo.exe` as they would an interpreter for any other lan
 
 ### Syntax
 
-`stgm` syntax mimics Agda's mixfix operator syntax. The following defines booleans and boolean operations.
+`stgm` syntax mimics Agda's mixfix operator syntax. The following complete `stgm` file defines booleans and boolean operations.
 
 ```php
 tci 0 true = Lx.Ly.x
