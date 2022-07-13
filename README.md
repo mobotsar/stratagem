@@ -18,7 +18,7 @@ Second, one simply uses `foo.exe` as they would an interpreter for any other lan
 
 `stgm` syntax mimics Agda's mixfix operator syntax. The following defines booleans and boolean operations.
 
-```
+```agda
 tci 0 true = λx.λy.x
 tci 0 false = λx.λy.y
 inl 1 _or_ = ((λp.(λq.(p p) q) \1) \2)
