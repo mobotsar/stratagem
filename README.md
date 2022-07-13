@@ -9,3 +9,6 @@ This enables students to "learn by doing", helping them to commit to memory the 
 ## Use
 
 Use of stratagem happens in two parts. First, one must write a (possibly empty) distfix precedence grammar. This is accomplished by populating a `.stgm` file with a series of syntax extensions and associated rewrite rules. `.stgm` syntax is described in the [Syntax](#Syntax) section.
+
+## Syntax
+yolo
