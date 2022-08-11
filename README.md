@@ -19,11 +19,11 @@ Second, one simply uses `foo.exe` as they would an interpreter for any other lan
 `stgm` syntax mimics Agda's mixfix operator syntax. The following complete `stgm` file defines booleans and boolean operations.
 
 ```php
-tci   true  = Lx.Ly.x
-tci   false = Lx.Ly.y
-inl 1 _or_  = ((Lp.(Lq.(p p) q) ~1) ~2)
-inl 2 _and_ = ((Lp.(Lq.(p q) p) ~1) ~2)
-pre 3 not_  = (Lp.(La.(Lb.(p b)) a) ~1)
+d 0 true  = Lx.Ly.x
+d 0 false = Lx.Ly.y
+l 1 _or_  = ((Lp.(Lq.(p p) q) ~1) ~2)
+l 2 _and_ = ((Lp.(Lq.(p q) p) ~1) ~2)
+e 3 not_  = (Lp.(La.(Lb.(p b)) a) ~1)
 ```
 
-The first column denotes the operator class. The possible classes are `tci` (closed/atomic), `pre` (prefix), `aft` (postfix), `inl` (left-associative infix), and `inr` (right-associative infix). The second column denotes the precedence of the operator, where operators with higher numbers bind tighter than those with lower numbers. Finally, we have the operators themselves. Each underscore indicates an expression hole, i.e. a parameter of the operator. These holes are numbered, starting at one, from left to right, and can be referenced in the corresponding expression to the right of the equals by prefacing the number with a tilde ('~'). In the event that an operator word contains a tilde, that word may be escaped with a backslash.
+The first column denotes the operator's class. The possible class indicators are `d` (closed/atomic), `e` (prefix), `t` (postfix), `l` (left-associative infix), and `r` (right-associative infix). The second column denotes the precedence of the operator, where operators with higher numbers bind tighter than those with lower numbers. Finally, we have the operators themselves. Each underscore indicates an expression hole, i.e. a parameter of the operator. These holes are numbered, starting at one, from left to right, and can be referenced in the corresponding expression to the right of the equals by prefacing the number with a tilde ('~'). In the event that an operator word contains a tilde, that word may be escaped with a backslash.
