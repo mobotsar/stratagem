@@ -19,8 +19,8 @@ Second, one simply uses `foo.exe` as they would an interpreter for any other lan
 `stgm` syntax mimics Agda's mixfix operator syntax. The following complete `stgm` file defines booleans and boolean operations.
 
 ```php
-d 0 true  = Lx.Ly.x
-d 0 false = Lx.Ly.y
+d   true  = Lx.Ly.x
+d   false = Lx.Ly.y
 l 1 _or_  = ((Lp.(Lq.(p p) q) ~1) ~2)
 l 2 _and_ = ((Lp.(Lq.(p q) p) ~1) ~2)
 e 3 not_  = (Lp.(La.(Lb.(p b)) a) ~1)
