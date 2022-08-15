@@ -45,7 +45,7 @@ maintainer:         mobotsar@protonmail.com
 category:           Language
 
 -- Extra files to be distributed with the package, such as examples or a README.
-extra-source-files: CHANGELOG.md
+extra-source-files: README.md
 
 library
     -- Modules exported by the library.
