@@ -44,7 +44,7 @@ Now for the actual thing. When `stratagem` is invoked, it'll read the stgmrc and
 
 ```
 --oneshot
---reduction=lazy
+--reduction lazy
 EpicSourceFile
 ```
 The full list of options and their functions follows.
