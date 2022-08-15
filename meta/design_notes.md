@@ -28,7 +28,7 @@ A (possibly non-continuous) precedence grammar is assembled from the lhs of the 
 
 ### Utilizing the products of above
 
-After we generate rewrite rules and parse the source, `GLL` returns a syntax tree. An alorgithm function, R, generic over the contents of that tree, will apply the exverse rules, producing a lambda-tree (lambda-term AST). This tree will be passed to the appropriate lambda-calculus interpreter (probably selected at L spec time by the user, between various semantic options), which will then return a lambda term in normal form, (or fail to terminate, but that's actually someone else's problem). If requested at spec time, another function, S, applies the inverse rules to the normal tree. The tree is then flattened to a string a presented to the user.
+After we generate rewrite rules and parse the source, `GLL` returns a syntax tree. An alorgithm function, R, generic over the contents of that tree, will apply the exverse rules, producing a lambda-tree (lambda-term AST). This tree will be passed to the appropriate lambda-calculus interpreter (probably selected at L spec time by the user, from various semantic options), which will then return a lambda term in normal form, (or fail to terminate, but that's actually someone else's problem). If requested at spec time, another function, S, applies the inverse rules to the normal tree. The tree is then `Show`n to the user.
 
 ### Physical assemblage of the L interpreter
 
