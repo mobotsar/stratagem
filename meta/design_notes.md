@@ -34,8 +34,23 @@ After we generate rewrite rules and parse the source, gll returns a parse tree. 
 
 ### Physical assemblage of the L interpreter
 
-As it turns out, this is kinda tricky to do with a measure of elegance. What I really _want_ is to do this in common lisp, or anything homoiconic really, but what I'm probably _going_ to do is use haskell. Anyway, let's explore what the haskel apporach would look like, so I can decide whether it's worth learning CL and introducing an FFI shim just to avoid some ugliness. First, I need to think about what the L interpreter actually acts like. Is it a standalone executable, fire and forget type deal, or is it a REPL? The REPL is better for my purposes, almost certainly, so that solves that question I guess. In that case, homoiconicity is far less important, as I can use `GLL.Parser.parse` partially applied (probably with -ffull-laziness for performance, though that's worth benchmarking) to evaluate source as it comes in. Because the runtime persists between most evaluations, this is basically fine. Perhaps I provide an option to execute an L program from the CLI, in which case we still incur the parser generation peanalty per-parse, but that means stratagem can have no dependency on GHC and never hits the disk, so it's worth it. Additionally, it seems possible that the generation penalty is rather less than the work of actually parsing (that's something to investigate at some point, but conversation in the haskell discord seems to suggest it is).
+As it turns out, this is kinda tricky to do with a measure of elegance. What I really _want_ is to do this in common lisp, or anything homoiconic really, but what I'm probably _going_ to do is use haskell. Anyway, let's explore what the haskel apporach would look like, so I can decide whether it's worth learning CL and introducing an FFI shim just to avoid some ugliness. First, I need to think about what the L interpreter actually acts like. Is it a standalone executable, fire and forget type deal, or is it a REPL? The REPL is better for my purposes, almost certainly, so that solves that question I guess. In that case, homoiconicity is far less important, as I can use `GLL.Parser.parse` partially applied (probably with -ffull-laziness for performance, though that's worth benchmarking) to evaluate source as it comes in. Because the runtime persists between most evaluations, this is basically fine. Perhaps I provide an option to execute an L program from the CLI, in which case we still incur the parser generation peanalty per-parse, but that means stratagem can have no dependency on GHC and never hits the disk, so it's worth it. Additionally, it seems possible that the generation penalty is rather less than the work of actually parsing (that's something to investigate at some point, but conversation in the haskell discord seems to suggest it is). So, in escence, there is no phycical assemblage of any L interpreter. Everything, from stgm parsing to L-source parsing happens with a single invocation of `stratagem`.
 
 ### UI of the L interpreter
 
-. . .
+First thing, since there's going to be a CLI, we probably want some sort of config file so the user doesn't have to provide the same option over and over and over and over and over and over and over again. Probably how that will work is that stratagem checks for a config file in the root of the current directory (config files in form *.rc, maybe). That facilitates a sort of "project directory" thing for each separate L, which is kinda neat. (Take care that this doesn't accidentally turn into a build system. (Oh shit oh god it's turned into a build system!))
+
+Now for the actual thing. When `stratagem` is invoked, it'll read the stgmrc and start a repl (unless it's been passed the --oneshot flag, in which case it _won't_). The stgmrc is literally just a line-by-line list of options that are passed to `stratagem` exactly as though they were given on the command line in the same order. For example, `stratagem --oneshot --reduction=lazy EpicSourceFile` with no stgmrc is precisely the same thing as `stratagem` with the following stgmrc.
+
+```
+--oneshot
+--reduction=lazy
+EpicSourceFile
+```
+The full list of options and their functions follows.
+
+- `source` where source is just the path to some L source to interpret.
+- `--oneshot` does the thingy. you know. Depends on `source`.
+- `--reduction=x` where is x some valid reduction strategy. I think there are 4 I want to support, but I don't remember what they're all properly called at this time.
+- `--stgm=x` where x is a stgm file.
+- `--rc=x` where x is an rc file.
