@@ -1,3 +1,5 @@
+### Overview
+
 First thing's first -- take a precedence grammar, give it to aasam, get a cfg, give it to a parser generator, get a parser, call it the parser.
 Take a source file, give it to the parser, get an ast, rewrite it, get a simple lambda tree, give it to a lambda calculus interpreter, get a result, display it.
 
@@ -28,8 +30,12 @@ A (possibly non-continuous) precedence grammar is assembled from the lhs of the 
 
 ### Utilizing the products of above
 
-After we generate rewrite rules and parse the source, `GLL` returns a parse tree. An function, R, generic over the contents of that tree, will apply the exverse rules, producing a lambda-term AST. The AST will be passed to the appropriate lambda-calculus interpreter (probably selected at L spec time by the user, from various options of differing semantics), which will then return a lambda term in normal form, (unless the input diverges, but that's actually someone else's problem). If requested at spec time, another function, S, applies the inverse rules to the normal tree. The tree is then `Show`n to the user (probably also parametrically with respect to a user-provided option).
+After we generate rewrite rules and parse the source, gll returns a parse tree. An function, R, generic over the contents of that tree, will apply the exverse rules, producing a lambda-term AST. The AST will be passed to the appropriate lambda-calculus interpreter (probably selected at L spec time by the user, from various options of differing semantics), which will then return a lambda term in normal form, (unless the input diverges, but that's actually someone else's problem). If requested at spec time, another function, S, applies the inverse rules to the normal tree. The tree is then `Show`n to the user (probably also parametrically with respect to a user-provided option).
 
 ### Physical assemblage of the L interpreter
+
+As it turns out, this is kinda tricky to do with a measure of elegance. What I really _want_ is to do this in common lisp, or anything homoiconic really, but what I'm probably _going_ to do is use haskell. Anyway, let's explore what the haskel apporach would look like, so I can decide whether it's worth learning CL and introducing an FFI shim just to avoid some ugliness. First, I need to think about what the L interpreter actually acts like. Is it a standalone executable, fire and forget type deal, or is it a REPL? The REPL is better for my purposes, almost certainly, so that solves that question I guess. In that case, homoiconicity is far less important, as I can use `GLL.Parser.parse` partially applied (probably with -ffull-laziness for performance, though that's worth benchmarking) to evaluate source as it comes in. Because the runtime persists between most evaluations, this is basically fine. Perhaps I provide an option to execute an L program from the CLI, in which case we still incur the parser generation peanalty per-parse, but that means stratagem can have no dependency on GHC and never hits the disk, so it's worth it. Additionally, it seems possible that the generation penalty is rather less than the work of actually parsing (that's something to investigate at some point, but conversation in the haskell discord seems to suggest it is).
+
+### UI of the L interpreter
 
 . . .
