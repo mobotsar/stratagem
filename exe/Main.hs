@@ -1,5 +1,8 @@
 module Main where
 
+import qualified LibInternal (someFunc)
+
 main :: IO ()
 main = do
   putStrLn "Main, checking in!"
+  LibInternal.someFunc ()
