@@ -40,7 +40,7 @@ As it turns out, this is kinda tricky to do with a measure of elegance. What I r
 
 First thing, since there's going to be a CLI, we probably want some sort of config file so the user doesn't have to provide the same option over and over and over and over and over and over and over again. Probably how that will work is that stratagem checks for a config file in the root of the current directory (config files in form *.rc, maybe). That facilitates a sort of "project directory" thing for each separate L, which is kinda neat. (Take care that this doesn't accidentally turn into a build system. (Oh shit oh god it's turned into a build system!))
 
-Now for the actual thing. When `stratagem` is invoked, it'll read the stgmrc and start a repl (unless it's been passed the --oneshot flag, in which case it _won't_), then it will execute the source iff source was provided. The stgmrc is literally just a line-by-line list of options that are passed to `stratagem` exactly as though they were given on the command line in the same order. For example, `stratagem --oneshot --reduction name EpicSourceFile` with no stgmrc is precisely the same thing as `stratagem` with the following stgmrc.
+Now for the actual thing. When `stratagem` is invoked, it'll read the stgmrc and start a repl (unless it's been passed the --oneshot flag, in which case it _won't_), then it will execute the source iff source was provided. The stgmrc is literally just a line-by-line list of options that are passed to `stratagem` exactly as though they were given on the command line in the same order. For example, `stratagem --oneshot --reduction name EpicSourceFile` with no rc is precisely the same thing as `stratagem` with the following rc.
 
 ```
 --oneshot
@@ -52,7 +52,7 @@ The full list of options and their functions follows.
 - `x` where x is just the path to some L source to interpret.
 - `--oneshot` does the thingy. you know. Depends on `source`. Excludes `--repl`.
 - `--repl` the opposite of `--oneshot`. Excludes `--oneshot`.
-- `--reduction x` where x is some valid reduction strategy. I think there are 4 I want to support, but I don't remember what they're all properly called at this time.
+- `--reduction x` where x is some valid reduction strategy. I think there are 4 I want to support, call-by-value, call-by-name, normal order, and applicative order. Options for those being "value", "name", "normal", and "applicative".
 - `--stgm x` where x is the path to a stgm file.
 - `--rc x` where x is the path to an rc file. Overrides any found during the in-directory search.
 - `--create x` creates a new directory, x, and populates it with x.stgm and x.rc files, as well as a source file, containing a pure lambda hello world, called hello.x, where x is whatever you want to call your language. Excludes all other options
