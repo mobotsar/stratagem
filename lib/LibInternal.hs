@@ -11,18 +11,26 @@ import Util
 
 import qualified Aasam
 import Aasam
-import Data.Bifunctor (Bifunctor(first))
-import GLL.Combinators (Token(BoolLit))
+    ( CfgProduction
+    , ContextFree
+    , NonTerminal(NonTerminal)
+    , Precedence
+    , PrecedenceProduction(Closed, Infixl, Infixr, Postfix, Prefix)
+    , Terminal(Terminal)
+    , m
+    )
+import Data.Bifunctor (Bifunctor(first, second))
 
+-- |Takes a Precedence and adds the required Closed production to it, then converts it to a CFG and adds the pure productions
 lambdificate :: Precedence -> ContextFree
 lambdificate p = sullyWith cfg
   where
-    cfg =
+    cfg@(start, _) =
         case Aasam.m (Closed (DLNe.singleton "PURE") `insert` p) of
             Left x0 -> x0
             Right _ -> error "This is a bug in Stratagem. Please report with error number 8675309."
     sullyWith :: ContextFree -> ContextFree
-    sullyWith (start, prods) = (start, partition isPureProd prods |> first f |> uncurry union |> union pure)
+    sullyWith = second $ partition isPureProd >. first f >. uncurry union >. union pure
       where
         isPureProd :: CfgProduction -> Bool
         isPureProd (NonTerminal "CE", [Left (Terminal "PURE")]) = True
@@ -33,19 +41,9 @@ lambdificate p = sullyWith cfg
         pure =
             Set.fromList
                 [ (lhs, [lt "X"])
-                , (lhs, [lt "(", start, start, lt ")"])
-                , (lhs, [lt "(", start, lt ".", start, lt ")"])
+                , (lhs, [lt "(", Right start, Right start, lt ")"])
+                , (lhs, [lt "(", Right start, lt ".", Right start, lt ")"])
                 ]
           where
             lt = Left . Terminal
-            rnt = Right . NonTerminal
             lhs = NonTerminal "PURE"
-            start = rnt (show (foldl df 0 p) ++ "00")
-              where
-                df = flip =<< (`ap` prec) . (if' .) . flip ((>) . prec)
-                  where
-                    prec (Closed _) = 0
-                    prec (Infixl x _) = x
-                    prec (Infixr x _) = x
-                    prec (Prefix x _) = x
-                    prec (Postfix x _) = x
