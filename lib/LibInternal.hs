@@ -25,19 +25,14 @@ import Data.Bifunctor (Bifunctor(first, second))
 lambdificate :: Precedence -> ContextFree
 lambdificate p = sullyWith cfg
   where
-    cfg@(start, _) =
-        case Aasam.m (Closed (DLNe.singleton "PURE") `insert` p) of
-            Left x0 -> x0
-            Right _ -> error "This is a bug in Stratagem. Please report with error number 8675309."
-    sullyWith :: ContextFree -> ContextFree
+    cfg@(start, _) = fromLeft err $ Aasam.m (Closed (DLNe.singleton "PURE") `insert` p)
+      where
+        err = error "This is a bug in Stratagem. Please report with error number 8675309."
     sullyWith = second $ partition isPureProd >. first f >. uncurry union >. union pure
       where
-        isPureProd :: CfgProduction -> Bool
         isPureProd (NonTerminal "CE", [Left (Terminal "PURE")]) = True
         isPureProd _ = False
-        f :: Set CfgProduction -> Set CfgProduction
-        f = Set.map (\(lhs, _) -> (lhs, [Right (NonTerminal "PURE")]))
-        pure :: Set CfgProduction
+        f = Set.map (second $ const [Right (NonTerminal "PURE")])
         pure =
             Set.fromList
                 [ (lhs, [lt "X"])

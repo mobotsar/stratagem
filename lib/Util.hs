@@ -23,3 +23,11 @@ tup a b = (a, b)
 if' :: Bool -> a -> a -> a
 if' True x _ = x
 if' False _ y = y
+
+fromLeft :: a -> Either a b -> a
+fromLeft _ (Left x) = x
+fromLeft x _ = x
+
+fromRight :: b -> Either a b -> b
+fromRight _ (Right x) = x
+fromRight x _ = x
