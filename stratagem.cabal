@@ -50,9 +50,11 @@ extra-source-files: README.md
 library
     -- Modules exported by the library.
     exposed-modules:  LibInternal
+    ghc-options: -ffull-laziness
 
     -- Modules included in this library but not exported.
-    -- other-modules:
+    other-modules:
+        Util
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
@@ -60,7 +62,8 @@ library
     -- Other library packages from which modules are imported.
     build-depends:    base ^>=4.15.1.0,
                       aasam,
-                      gll
+                      gll,
+                      containers >=0.6.4 && <0.7
 
     -- Directories containing source files.
     hs-source-dirs:   lib
@@ -71,6 +74,10 @@ library
 executable stratagem
     -- .hs or .lhs file containing the Main module.
     main-is:          Main.hs
+
+    ghc-options:
+        -ffull-laziness
+        -- -O3
 
     -- Modules included in this executable, other than Main.
     -- other-modules:
@@ -103,4 +110,12 @@ test-suite stratagem-test
     main-is:          LibInternalTest.hs
 
     -- Test dependencies.
-    build-depends:    base ^>=4.15.1.0
+    build-depends:
+        base ^>=4.15.1.0,
+        HUnit ==1.6.2.0,
+        test-framework ==0.8.2.0,
+        test-framework-hunit ==0.3.0.2,
+        containers >=0.6.4 && <0.7,
+        stratagem,
+        aasam,
+        containers
