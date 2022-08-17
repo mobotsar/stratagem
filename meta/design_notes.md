@@ -12,13 +12,27 @@ Positary operators are defined as shown in the readme, but rules for atoms (null
 
 For convenience reasons, we probably want to allow violations of m's continuity requirement in the specification of operators. This requires a transformation of the given precedence grammar to render the precedences continuous before it's passed to m. That's not hard, just something to keep in mind.
 
+Custom operators can't make use of any character in the pure lambda operator syntax. So, no ".", and no "(" or ")". The pure syntax is given below.
+```
+T ::= V
+    | ( V . T )
+    | ( T T )
+```
+where T is the nonterminal of terms and V is the pseudo-terminal of identifiers.
+
+### Grafting the pure syntax to the udef'd syntax
+
+A closed production with the atom "PURE" must be added to the precedence grammar before `m` runs. This will result in a CE production going to "PURE". This production will be replaced with CE -> T.
+
+In the future, examine part VI of Annika Aasa's PhD thesis for some insight into how to make this work with an arbitrary pure syntax, i.e. one where not all productions are closed. Use of a more standard syntax, like the one described in VT's opendsa, may be desireable.
+
 ### Whitespace
 
-This is separate but related. It's possible that some operator (lambda application, juxtaposition, for example) may be most naturally defined with whitespace as a terminal. However, the L interpreter should be whitespace insensitive whenever possible, for convenience reasons. Consider solutions that satisfy both requirements (a flag and mark approach seems reasonable).
+~~This is separate but related. It's possible that some operator (lambda application, juxtaposition, for example) may be most naturally defined with whitespace as a terminal. However, the L interpreter should be whitespace insensitive whenever possible, for convenience reasons. Consider solutions that satisfy both requirements (a flag and mark approach seems reasonable).~~
 
-I intend to lex the source before passing it to `GLL`, so this sensitive sensitivity could probably be handled in the lexer. The trouble with these dual goals is that most general aproaches become to difficult to reason about with respect to ambiguity in the parsing machinery. One possible solution is to only allow whitespace terminals a intermediate terminals of closed productions. In principle, it would be possible to allow them between other terminals in operators of any class, since the basis of the distfix extension of `m` is that any closed symbol sequence can be treated like an atomic expression (AE from the paper) when it comes to questions of ambiguity (whether I actually do that depeneds on how much of a pain in the ass it shapes up to be). I can't just do a normal stack-based thing where I track what operator context is active at each token, because operators need not have unique terminators, so this could take some thought. It might not be possible.
+~~I intend to lex the source before passing it to `GLL`, so this sensitive sensitivity could probably be handled in the lexer. The trouble with these dual goals is that most general aproaches become to difficult to reason about with respect to ambiguity in the parsing machinery. One possible solution is to only allow whitespace terminals a intermediate terminals of closed productions. In principle, it would be possible to allow them between other terminals in operators of any class, since the basis of the distfix extension of `m` is that any closed symbol sequence can be treated like an atomic expression (AE from the paper) when it comes to questions of ambiguity (whether I actually do that depeneds on how much of a pain in the ass it shapes up to be). I can't just do a normal stack-based thing where I track what operator context is active at each token, because operators need not have unique terminators, so this could take some thought. It might not be possible.~~
 
-Alternatively, I could modify the either the input or the output of `m` to be whitespace insensitive where appropriate. This definitely _is_ possible, but could potentially be a little more work (especially in the testing department). All the same, because this is the approach that I favor at the moment, since I know I can do it. Modification of the precedence grammar is probably easier than futzing about with a generated cfg. You still can't define the standary lambda syntax as a distfix grammar, but this gets you closer.
+~~Alternatively, I could modify the either the input or the output of `m` to be whitespace insensitive where appropriate. This definitely _is_ possible, but could potentially be a little more work (especially in the testing department). All the same, because this is the approach that I favor at the moment, since I know I can do it. Modification of the precedence grammar is probably easier than futzing about with a generated cfg. You still can't define the standary lambda syntax as a distfix grammar, but this gets you closer.~~
 
 Upon further consideration, this whole "sensitive sensitivy" thing was a janky idea, and I can't be arsed to make it work anyway.
 
