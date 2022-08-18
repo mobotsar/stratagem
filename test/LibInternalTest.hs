@@ -21,4 +21,4 @@ main :: IO ()
 main = defaultMain tests
 
 labeledTests :: [Test.HUnit.Test]
-labeledTests = testMap [("", LibInternal.lambdificate (Set.singleton (Infixl 1 (fromList ["+"]))), (NonTerminal "", Set.empty))]
+labeledTests = testMap [("", LibInternal.lambdify (Set.singleton (Infixl 1 (fromList ["+"]))), Left (AasamError []))]

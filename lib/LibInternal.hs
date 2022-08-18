@@ -52,7 +52,6 @@ buildConfig raw = Nothing
 lambdify :: Precedence -> Either AasamError ContextFree
 lambdify = sullyWith <=< (swapEither . Aasam.m . insert (Closed (DLNe.singleton "PURE")))
   where
-    sullyWith :: ContextFree -> Either AasamError ContextFree
     sullyWith cfg = Right $ second (union pure . uncurry union . first f . partition isPureProd) cfg
       where
         isPureProd (NonTerminal "CE", [Left (Terminal "PURE")]) = True
