@@ -61,9 +61,10 @@ library
 
     -- Other library packages from which modules are imported.
     build-depends:    base ^>=4.15.1.0,
-                      aasam,
-                      gll,
-                      containers >=0.6.4 && <0.7
+                      aasam ^>=0.2,
+                      gll ^>=0.4.0,
+                      containers >=0.6.4 && <0.7,
+                      text
 
     -- Directories containing source files.
     hs-source-dirs:   lib
@@ -88,7 +89,8 @@ executable stratagem
     -- Other library packages from which modules are imported.
     build-depends:
         base ^>=4.15.1.0,
-        stratagem
+        stratagem,
+        text
 
     -- Directories containing source files.
     hs-source-dirs:   exe
@@ -118,4 +120,5 @@ test-suite stratagem-test
         containers >=0.6.4 && <0.7,
         stratagem,
         aasam,
-        containers
+        containers,
+        text

@@ -7,7 +7,13 @@ import qualified Data.List.NonEmpty as DLNe
 
 import Control.Monad ((<=<), ap)
 
+import qualified Data.Text as Text
+import Data.Text (Text)
+
 import Util
+
+import qualified GLL.Types.Grammar as GllGrm
+import GLL.Types.Grammar (Grammar)
 
 import qualified Aasam
 import Aasam
@@ -20,8 +26,8 @@ import Aasam
     , Terminal(Terminal)
     , m
     )
+
 import Data.Bifunctor (Bifunctor(first, second))
-import GHC.Event.Windows (CbResult)
 
 data Rest =
     Rest
@@ -50,13 +56,13 @@ buildConfig raw = Nothing
 
 -- |Takes a Precedence and adds the required Closed production to it, then converts it to a CFG and adds the pure productions
 lambdify :: Precedence -> Either AasamError ContextFree
-lambdify = sullyWith <=< (swapEither . Aasam.m . insert (Closed (DLNe.singleton "PURE")))
+lambdify = sullyWith <=< (Aasam.m . insert (Closed $ (DLNe.singleton . Text.pack) "PURE"))
   where
     sullyWith cfg = Right $ second (union pure . uncurry union . first f . partition isPureProd) cfg
       where
-        isPureProd (NonTerminal "CE", [Left (Terminal "PURE")]) = True
+        isPureProd (NonTerminal ce, [Left (Terminal pure)]) = ce == Text.pack "CE" && pure == Text.pack "PURE"
         isPureProd _ = False
-        f = Set.map (second $ const [Right (NonTerminal "PURE")])
+        f = Set.map (second $ const [(Right . NonTerminal . Text.pack) "PURE"])
         pure =
             Set.fromList
                 [ (lhs, [lt "X"])
@@ -64,6 +70,6 @@ lambdify = sullyWith <=< (swapEither . Aasam.m . insert (Closed (DLNe.singleton 
                 , (lhs, [lt "(", start, lt ".", start, lt ")"])
                 ]
           where
-            lt = Left . Terminal
-            lhs = NonTerminal "PURE"
+            lt = Left . Terminal . Text.pack
+            lhs = (NonTerminal . Text.pack) "PURE"
             start = Right $ fst cfg

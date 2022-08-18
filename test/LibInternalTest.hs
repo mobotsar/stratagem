@@ -6,6 +6,8 @@ import Data.List.NonEmpty
 import qualified Data.Set as Set
 import qualified Data.List as List
 
+import qualified Data.Text as Text
+
 import Test.Framework (defaultMain)
 import Test.Framework.Providers.API (Test(Test))
 import Test.Framework.Providers.HUnit (hUnitTestToTests)
@@ -17,8 +19,10 @@ testMap = List.map (\(label, x, y) -> TestLabel label (TestCase (assertEqual "" 
 tests :: [Test.Framework.Providers.API.Test]
 tests = hUnitTestToTests $ TestList labeledTests
 
+fromList' = fromList . List.map Text.pack
+
 main :: IO ()
 main = defaultMain tests
 
 labeledTests :: [Test.HUnit.Test]
-labeledTests = testMap [("", LibInternal.lambdify (Set.singleton (Infixl 1 (fromList ["+"]))), Left (AasamError []))]
+labeledTests = testMap [("", LibInternal.lambdify (Set.singleton (Infixl 1 (fromList' ["+"]))), Left (AasamError []))]
