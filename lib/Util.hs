@@ -31,3 +31,7 @@ fromLeft x _ = x
 fromRight :: b -> Either a b -> b
 fromRight _ (Right x) = x
 fromRight x _ = x
+
+swapEither :: Either a b -> Either b a
+swapEither (Right x) = Left x
+swapEither (Left x) = Right x

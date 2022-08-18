@@ -5,13 +5,14 @@ import Data.Set (Set, insert, partition, union)
 
 import qualified Data.List.NonEmpty as DLNe
 
-import Control.Monad (ap)
+import Control.Monad ((<=<), ap)
 
 import Util
 
 import qualified Aasam
 import Aasam
-    ( CfgProduction
+    ( AasamError
+    , CfgProduction
     , ContextFree
     , NonTerminal(NonTerminal)
     , Precedence
@@ -20,15 +21,39 @@ import Aasam
     , m
     )
 import Data.Bifunctor (Bifunctor(first, second))
+import GHC.Event.Windows (CbResult)
+
+data Rest =
+    Rest
+        { source :: String
+        , reduction :: String
+        , rc :: String
+        }
+
+newtype Oneshot =
+    Oneshot Rest
+
+newtype Repl =
+    Repl Rest
+
+newtype NonCreates =
+    NonCreates (Either Oneshot Repl)
+
+newtype Create =
+    Create String
+
+newtype Config =
+    Config (Either Create NonCreates)
+
+buildConfig :: String -> Maybe Config
+buildConfig raw = Nothing
 
 -- |Takes a Precedence and adds the required Closed production to it, then converts it to a CFG and adds the pure productions
-lambdificate :: Precedence -> ContextFree
-lambdificate p = sullyWith cfg
+lambdify :: Precedence -> Either AasamError ContextFree
+lambdify = sullyWith <=< (swapEither . Aasam.m . insert (Closed (DLNe.singleton "PURE")))
   where
-    cfg@(start, _) = fromLeft err $ Aasam.m (Closed (DLNe.singleton "PURE") `insert` p)
-      where
-        err = error "This is a bug in Stratagem. Please report with error number 8675309."
-    sullyWith = second $ partition isPureProd >. first f >. uncurry union >. union pure
+    sullyWith :: ContextFree -> Either AasamError ContextFree
+    sullyWith cfg = Right $ second (union pure . uncurry union . first f . partition isPureProd) cfg
       where
         isPureProd (NonTerminal "CE", [Left (Terminal "PURE")]) = True
         isPureProd _ = False
@@ -36,9 +61,10 @@ lambdificate p = sullyWith cfg
         pure =
             Set.fromList
                 [ (lhs, [lt "X"])
-                , (lhs, [lt "(", Right start, Right start, lt ")"])
-                , (lhs, [lt "(", Right start, lt ".", Right start, lt ")"])
+                , (lhs, [lt "(", start, start, lt ")"])
+                , (lhs, [lt "(", start, lt ".", start, lt ")"])
                 ]
           where
             lt = Left . Terminal
             lhs = NonTerminal "PURE"
+            start = Right $ fst cfg
