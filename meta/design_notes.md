@@ -6,7 +6,7 @@ Take a source file, give it to the parser, get an ast, rewrite it, get a simple 
 ### Some basic principles
 
 Operators may appear in the rhs of other operators, but dependency may not be cyclic, neither may operators appear in their own rhs.
-Positary operators are defined as shown in the readme, but rules for atoms (nullary operators) are given by a user-provided generation function :: X -> Y, where X is the type of valid atom lhs and Y is the type of mix-strings (lambda strings containing zero or more unexpanded userdef'd operators). This function produces exverse (a.k.a. rewrite from userdef'd lang to pure lambda) and inverse (from pure to udef) rule(s) based on the finite set of actual atoms present in the source at hand. Critically, this happens post-parser-generation, as the parser deals with unexpanded mix-strings, i.e. valid programs in the user language. (Call the language/syntax defined by the user "L".)
+Positary operators are defined as shown in the readme, but rules for atoms (nullary operators) are given by a user-provided generation function :: X -> Y, where X is the type of valid atom lhs and Y is the type of mix-strings (lambda strings containing zero or more unexpanded userdef'd operators). This function produces "exverse" (a.k.a. rewrite from userdef'd lang to pure lambda) and "inverse" (from pure to udef) rule(s) based on the finite set of actual atoms present in the source at hand. Critically, this happens post-parser-generation, as the parser deals with unexpanded mix-strings, i.e. valid programs in the user language. (Call the language/syntax defined by the user "L".)
 
 (Consider implementing multiple reduction semantics, especially the addition of laziness.)
 
