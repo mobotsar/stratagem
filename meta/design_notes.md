@@ -12,7 +12,7 @@ Positary operators are defined as shown in the readme, but rules for atoms (null
 
 (Consider implementing multiple reduction semantics, especially the addition of laziness.)
 
-For convenience reasons, we probably want to allow violations of m's continuity requirement in the specification of operators. This requires a transformation of the given precedence grammar to render the precedences continuous before it's passed to m. That's not hard, just something to keep in mind.
+For convenience reasons, we probably want to allow violations of m's continuity requirement (the fifth error variety described in the `m` documentation) in the specification of operators. This requires a transformation of the given precedence grammar to render the precedences continuous before it's passed to m. That's not hard, just something to keep in mind.
 
 Custom operators can't make use of any character in the pure lambda operator syntax. So, no ".", and no "(" or ")". The pure syntax is given below.
 ```
