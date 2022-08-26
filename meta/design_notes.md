@@ -3,6 +3,8 @@
 First thing's first -- take a precedence grammar, give it to aasam, get a cfg, give it to a parser generator, get a parser, call it the parser.
 Take a source file, give it to the parser, get an ast, rewrite it, get a simple lambda tree, give it to a lambda calculus interpreter, get a result, display it.
 
+It's probably worth reading the documention of `Aasam.m` [here](https://hackage.haskell.org/package/aasam-0.2.0.0/docs/Aasam.html), to ensure understanding of some references made in this document.
+
 ### Some basic principles
 
 Operators may appear in the rhs of other operators, but dependency may not be cyclic, neither may operators appear in their own rhs.
