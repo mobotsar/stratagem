@@ -34,7 +34,7 @@ In the future, examine part VI of Annika Aasa's PhD thesis for some insight into
 
 ~~Alternatively, I could modify the either the input or the output of `m` to be whitespace insensitive where appropriate. This definitely _is_ possible, but could potentially be a little more work (especially in the testing department). All the same, because this is the approach that I favor at the moment, since I know I can do it. Modification of the precedence grammar is probably easier than futzing about with a generated cfg. You still can't define the standary lambda syntax as a distfix grammar, but this gets you closer.~~
 
-Upon further consideration, this whole "sensitive sensitivy" thing was a janky idea, and I can't be arsed to make it work anyway.
+Upon further consideration, this whole "sensitive sensitivy" thing was a truly terrible idea, and I can't be arsed to make it work anyway.
 
 ### A quick note
 
