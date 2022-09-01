@@ -3,14 +3,16 @@
 First thing's first -- take a precedence grammar, give it to aasam, get a cfg, give it to a parser generator, get a parser, call it the parser.
 Take a source file, give it to the parser, get an ast, rewrite it, get a simple lambda tree, give it to a lambda calculus interpreter, get a result, display it.
 
+It's probably worth reading the documention of `Aasam.m` [here](https://hackage.haskell.org/package/aasam-0.2.0.0/docs/Aasam.html), to ensure understanding of some references made in this document.
+
 ### Some basic principles
 
 Operators may appear in the rhs of other operators, but dependency may not be cyclic, neither may operators appear in their own rhs.
-Positary operators are defined as shown in the readme, but rules for atoms (nullary operators) are given by a user-provided generation function :: X -> Y, where X is the type of valid atom lhs and Y is the type of mix-strings (lambda strings containing zero or more unexpanded userdef'd operators). This function produces exverse (a.k.a. rewrite from userdef'd lang to pure lambda) and inverse (from pure to udef) rule(s) based on the finite set of actual atoms present in the source at hand. Critically, this happens post-parser-generation, as the parser deals with unexpanded mix-strings, i.e. valid programs in the user language. (Call the language/syntax defined by the user "L".)
+Positary operators are defined as shown in the readme, but rules for atoms (nullary operators) are given by a user-provided generation function :: X -> Y, where X is the type of valid atom lhs and Y is the type of mix-strings (lambda strings containing zero or more unexpanded userdef'd operators). This function produces "exverse" (a.k.a. rewrite from userdef'd lang to pure lambda) and "inverse" (from pure to udef) rule(s) based on the finite set of actual atoms present in the source at hand. Critically, this happens post-parser-generation, as the parser deals with unexpanded mix-strings, i.e. valid programs in the user language. (Call the language/syntax defined by the user "L".)
 
 (Consider implementing multiple reduction semantics, especially the addition of laziness.)
 
-For convenience reasons, we probably want to allow violations of m's continuity requirement in the specification of operators. This requires a transformation of the given precedence grammar to render the precedences continuous before it's passed to m. That's not hard, just something to keep in mind.
+For convenience reasons, we probably want to allow violations of m's continuity requirement (the fifth error variety described in the `m` documentation) in the specification of operators. This requires a transformation of the given precedence grammar to render the precedences continuous before it's passed to m. That's not hard, just something to keep in mind.
 
 Custom operators can't make use of any character in the pure lambda operator syntax. So, no ".", and no "(" or ")". The pure syntax is given below.
 ```
@@ -34,7 +36,7 @@ In the future, examine part VI of Annika Aasa's PhD thesis for some insight into
 
 ~~Alternatively, I could modify the either the input or the output of `m` to be whitespace insensitive where appropriate. This definitely _is_ possible, but could potentially be a little more work (especially in the testing department). All the same, because this is the approach that I favor at the moment, since I know I can do it. Modification of the precedence grammar is probably easier than futzing about with a generated cfg. You still can't define the standary lambda syntax as a distfix grammar, but this gets you closer.~~
 
-Upon further consideration, this whole "sensitive sensitivy" thing was a janky idea, and I can't be arsed to make it work anyway.
+Upon further consideration, this whole "sensitive sensitivy" thing was a truly terrible idea, and I can't be arsed to make it work anyway.
 
 ### A quick note
 
