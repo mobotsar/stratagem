@@ -24,7 +24,7 @@ where T is the nonterminal of terms and V is the pseudo-terminal of identifiers.
 
 ### Grafting the pure syntax to the udef'd syntax
 
-A closed production with the atom "PURE" must be added to the precedence grammar before `m` runs. This will result in a CE production going to "PURE". This production will be replaced with CE -> T.
+A closed production with the atom "PURE" must be added to the precedence grammar before `m` runs. This will result in a CE cfg production going to the terminal "PURE". This production will be replaced with CE -> T.
 
 In the future, examine part VI of Annika Aasa's PhD thesis for some insight into how to make this work with an arbitrary pure syntax, i.e. one where not all productions are closed. Use of a more standard syntax, like the one described in VT's opendsa, may be desireable.
 
